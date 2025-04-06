@@ -11,6 +11,7 @@ import com.intellij.openapi.editor.ex.util.EditorScrollingPositionKeeper;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil;
+import com.intellij.openapi.externalSystem.util.task.TaskExecutionSpec;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -97,14 +98,18 @@ public class ReformatCodeProcessor extends AbstractLayoutCodeProcessor {
                       constructTaskExecutionSettings(fileToProcess);
 
                   // Execute gradle task
-                  ExternalSystemUtil.runTask(
-                      settings,
-                      DefaultRunExecutor.EXECUTOR_ID,
-                      myProject,
-                      GradleConstants.SYSTEM_ID,
-                      null,
-                      ProgressExecutionMode.IN_BACKGROUND_ASYNC,
-                      false);
+                  TaskExecutionSpec spec =
+                      TaskExecutionSpec.create(
+                              myProject,
+                              GradleConstants.SYSTEM_ID,
+                              DefaultRunExecutor.EXECUTOR_ID,
+                              settings)
+                          .withProgressExecutionMode(ProgressExecutionMode.IN_BACKGROUND_ASYNC)
+                          .withCallback(null)
+                          .withUserData(null)
+                          .withActivateToolWindowBeforeRun(false)
+                          .build();
+                  ExternalSystemUtil.runTask(spec);
                 }));
   }
 
