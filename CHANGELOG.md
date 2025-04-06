@@ -3,6 +3,7 @@
 # spotless Changelog
 
 ## [Unreleased]
+- Update project to intellij template v2.1.0 (java 21)
 
 ## [2.0.0]
 Introduce new "Reformat all files" command to run Spotless on all files in a project rather than just the current one. 
